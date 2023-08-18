@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/ASP_Net_Core_example/Logs/.gitkeep
+/ASP_Net_Core_example/Logs/RequestLog.txt
