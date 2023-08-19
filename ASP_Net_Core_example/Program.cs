@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ASP_Net_Core_example.Models;
 
 //Основные процессы, происходящие в IHostBuilder CreateHostBuilder:
 //        Устанавливается корневая папка-каталог приложения, где при сборке проекта будет осуществляться поиск файлов проекта (например, веб-страниц для отображения).

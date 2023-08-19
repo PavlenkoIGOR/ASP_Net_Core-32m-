@@ -32,7 +32,7 @@ if (env.IsDevelopment() || env.IsStaging()){}
                 await context.Response.WriteAsync($"Welcome to the {env.ApplicationName}!");
             });
 
-Добавлен компонент для логирования запросов с использованием метода Use (просто полезная фича).
+Добавлен    компонент для логирования запросов с использованием метода Use (просто полезная фича).
             app.Use(async (context, next) =>
             {
                 // Для логирования данных о запросе используем свойства объекта HttpContext
@@ -61,6 +61,19 @@ if (env.IsDevelopment() || env.IsStaging()){}
 Добавлена   папка "wwwroot". В класс Startup дописана строка подключения Static-файлов: app.UseStaticFiles();
             После этого страницу Index.html можно открыть прописав после начального адреса: "/index.html".
 
+Добавлена   папка "Models". Класс "UserInfo.cs", который будет хранить данные о пользователе, который подключился.
+
+Добавлен    nuget-пакет "Entity Framework Core" и "microsoft.entityframeworkcore.sqlserver".
+
+Добавлена   строка подключения ["ConnectionStrings": {"DefaultConnection": "Server=localhost\SQLEXPRESS;Database=master1;Trusted_Connection=True;"
+            },] в файл appSettings.Development.json.
+            В Production-окружении мы бы использовали для этого appSettings.json.
+
+Добавлен    класс "AppContext.cs". В класс "Startup.cs" добавлен "public IConfiguration iConfig;". В метод "ConfigureServices()" класса "Startup.cs" добавлены строки [string connection = iConfig.GetConnectionString("DefaultConnection");
+            services.AddDbContext<MyAppContext>(option => option.UseSqlServer(connection));]
+
+Добавлена   папка "Repository".
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Следует соблюдать последовательность методов в методе Configure();.
@@ -77,3 +90,5 @@ if (env.IsDevelopment() || env.IsStaging()){}
 
 В вашем проекте теперь пишутся логи, и Git ими засорять, конечно, не стоит. Для этого можно добавить RequestLog.txt в файл .gitignore.
 А можно добавить в папку Logs небольшой пустой файлик .gitkeep, чтобы сама папка Logs в Git попала, но без содержимого.
+
+Репозитории необходимо регестрировать в "ConfigureServices()".

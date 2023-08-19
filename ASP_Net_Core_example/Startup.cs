@@ -10,16 +10,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using ASP_Net_Core_example.MiddleWares;
 using System.Text;
+using Microsoft.Extensions.Configuration.Ini;
+using Microsoft.Extensions.Configuration;
+using ASP_Net_Core_example.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASP_Net_Core_example
 {
     public class Startup
     {
         static IWebHostEnvironment _env;
+        public IConfiguration iConfig;
 
-        public Startup(IWebHostEnvironment env)
+        public Startup(IWebHostEnvironment env, IConfiguration iConf)
         {
             _env = env;
+            iConfig = iConf;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -31,6 +37,10 @@ namespace ASP_Net_Core_example
 
             ////функционал авторизации:
             //services.AddAuthentication();
+            services.AddSingleton<IUserInfoRepository, UserInfoRepository>();
+
+            string connection = iConfig.GetConnectionString("DefaultConnection");
+            services.AddDbContext<MyAppContext>(option => option.UseSqlServer(connection));
         }
 
 

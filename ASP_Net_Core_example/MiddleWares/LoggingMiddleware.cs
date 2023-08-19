@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using ASP_Net_Core_example.Models;
 
 namespace ASP_Net_Core_example.MiddleWares
 {
@@ -13,14 +14,16 @@ namespace ASP_Net_Core_example.MiddleWares
     {
         private readonly RequestDelegate _next;
         static IWebHostEnvironment _env;
+        static IUserInfoRepository _userInfoRepository;
 
         /// <summary>
         ///  Middleware-компонент должен иметь конструктор, принимающий RequestDelegate
         /// </summary>
-        public LoggingMiddleware(RequestDelegate next, IWebHostEnvironment env)
+        public LoggingMiddleware(RequestDelegate next, IWebHostEnvironment env, IUserInfoRepository userInfoRepository)
         {
             _next = next;
             _env = env;
+            _userInfoRepository = userInfoRepository;
         }
 
         /// <summary>
@@ -45,6 +48,13 @@ namespace ASP_Net_Core_example.MiddleWares
         /// </summary>
         public async Task InvokeAsync(HttpContext context)
         {
+            string userAgent = context.Request.Headers["User-Agent"][0];
+            var newUserInfo = new UserInfo() { 
+            Id = Guid.NewGuid(),
+            Date = DateTime.Now,
+            UserAgent = userAgent};
+            await _userInfoRepository.AddUserInfo(newUserInfo);
+
             await WriteRequestLogIntoTXT(context);
 
             // Передача запроса далее по конвейеру
