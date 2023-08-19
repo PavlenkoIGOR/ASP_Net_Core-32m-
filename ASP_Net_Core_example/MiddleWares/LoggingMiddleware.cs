@@ -24,19 +24,29 @@ namespace ASP_Net_Core_example.MiddleWares
         }
 
         /// <summary>
-        ///  Необходимо реализовать метод Invoke  или InvokeAsync
+        /// асинхронный метод для записи логов в RequestLog.txt
         /// </summary>
-        public async Task InvokeAsync(HttpContext context)
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private async Task WriteRequestLogIntoTXT(HttpContext context)
         {
-
             // Для логирования данных о запросе используем свойста объекта HttpContext
-            string logMessage = $"[{DateTime.Now}]: New request to http://{context.Request.Host.Value + context.Request.Path}";
+            string logMessage = $"[{DateTime.Now}]: New request to http://{context.Request.Host.Value + context.Request.Path}" + Environment.NewLine;
 
             // Путь до лога (опять-таки, используем свойства IWebHostEnvironment)
             string logFilePath = Path.Combine(_env.ContentRootPath, "Logs", "RequestLog.txt");
 
-
+            //асинхронная запись в файл RequestLog.txt
             await File.AppendAllTextAsync(logFilePath, logMessage);
+        }
+
+        /// <summary>
+        ///  Необходимо реализовать метод Invoke  или InvokeAsync
+        /// </summary>
+        public async Task InvokeAsync(HttpContext context)
+        {
+            await WriteRequestLogIntoTXT(context);
+
             // Передача запроса далее по конвейеру
             await _next.Invoke(context);
         }

@@ -38,8 +38,9 @@ namespace ASP_Net_Core_example
 //Дальше вызовом метода webBuilder.UseStartup<Startup>() будет определён и подключён класс Startup, в котором непосредственно запускаются настраиваемые сервисы.
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-
                     webBuilder.UseStartup<Startup>();
+                    // Переопределяем путь до статических файлов по умолчанию
+                    webBuilder.UseWebRoot("Views");
                 });
     }
 }

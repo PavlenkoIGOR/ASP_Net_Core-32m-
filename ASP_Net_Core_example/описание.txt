@@ -7,7 +7,8 @@
         Testing — тестовое, при котором проект размещается на так называемом «тестовом стенде» — сервере с ненастоящими данными для первичной отладки.
         Staging — размещение объекта на сервере с конфигурацией и данными, максимально приближенными к реальным, для финального тестирования.
         Production — так называемая «боевая» среда. Приложение размещается на реальном сервере для взаимодействия с реальными пользователями.
-При добавлении окружения создается JSON-файл (пример: при добавлении Staging - в Startup.sc в условие запуска проекта добавилось || env.IsStaging(): 
+        Название конфигурации укзывается в launchSettings.json в строках ["ASPNETCORE_ENVIRONMENT": "Development"]
+При добавлении окружения создается JSON-файл (пример: при добавлении Staging (appsettings.Staging.json и т.п.) - в Startup.sc в условие запуска проекта добавилось || env.IsStaging(): 
 
 if (env.IsDevelopment() || env.IsStaging()){}
 и был создан файл "appSettings.Staging.json".
@@ -50,7 +51,15 @@ if (env.IsDevelopment() || env.IsStaging()){}
 
 Добавлен    пустой файлик .gitkeep (см. ниже);
 
-Добавлена   папка "MiddleWares" c классом LoggingMiddleware.cs (из Startup убран метод для записи логов в отдельный файл и помещен в класс LoggingMiddleware)
+Добавлена   папка "MiddleWares" c классом LoggingMiddleware.cs (из Startup убран метод для записи логов в отдельный файл и помещен в класс LoggingMiddleware).
+            В класс Startup дописана строка app.UseMiddleware<LoggingMiddleware>();
+
+            строка "webBuilder.UseWebRoot("Views");" в метод IHostBuilder CreateHostBuilder();
+
+Добавлена   папка Views со стартовой страницей Index.html
+
+Добавлена   папка "wwwroot". В класс Startup дописана строка подключения Static-файлов: app.UseStaticFiles();
+            После этого страницу Index.html можно открыть прописав после начального адреса: "/index.html".
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

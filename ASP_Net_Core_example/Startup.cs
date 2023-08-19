@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ASP_Net_Core_example.MiddleWares;
+using System.Text;
 
 namespace ASP_Net_Core_example
 {
@@ -49,31 +50,47 @@ namespace ASP_Net_Core_example
             {
                 // 1. Добавляем компонент, отвечающий за диагностику ошибок
                 app.UseDeveloperExceptionPage();
+
             }
 
             //маршрутизатор
             // 2. Добавляем компонент, отвечающий за маршрутизацию
             app.UseRouting();
 
-
             // 3. Добавляем компонент с настройкой маршрутов
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context => {
-                    await context.Response.WriteAsync($"Welcome to the {_env.ApplicationName}!"); 
+                    //это тренеровочная строчка
+                    //await context.Response.WriteAsync($"Welcome to the {_env.ApplicationName}!"); 
+
+                    string viewPath = Path.Combine(Directory.GetCurrentDirectory(), "Views", "Index.html");
+                    var html = new StringBuilder(await File.ReadAllTextAsync(viewPath));
+                        //.Replace("<!--SIDEBAR-->", sidebarHTML)
+                    await context.Response.WriteAsync(html.ToString());
                 });
             });
 
             app.Map("/about", About);
             app.Map("/config", Config);
-            app.UseMiddleware<LoggingMiddleware>();
+            app.UseMiddleware<LoggingMiddleware>(); //это для логгирования
+            app.UseStaticFiles();//возможность использовать статические файлы (wwwroot)
 
+            // обрабатываем ошибки HTTP
+            app.UseStatusCodePages();
+
+            Console.WriteLine($"Launching project from: {_env.ContentRootPath}");
 
             // Добавим в конвейер запросов обработчик самым простым способом
             //результат увидим, если после адреса стартовой страницы через слеш ввести что угодно
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync($"app.Run()\nWelcome to the {_env.ApplicationName}!");
+                int zero = 0;
+                int result = 4 / zero;
+
+                await context.Response.WriteAsync($"Page not found");
+
+                //await context.Response.WriteAsync($"app.Run()\nWelcome to the {_env.ApplicationName}!");
             });
         }
 
