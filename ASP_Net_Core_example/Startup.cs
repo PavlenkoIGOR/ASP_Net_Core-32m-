@@ -8,6 +8,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ASP_Net_Core_example.MiddleWares;
 
 namespace ASP_Net_Core_example
 {
@@ -65,18 +66,7 @@ namespace ASP_Net_Core_example
 
             app.Map("/about", About);
             app.Map("/config", Config);
-
-            //Добавляем компонент для логирования запросов с использованием метода Use.
-            app.Use(async (context, next) =>
-            {
-                // Для логирования данных о запросе используем свойства объекта HttpContext
-                // Строка для публикации в лог:
-                string logMessage = $"[{DateTime.Now}]: New request to http://{context.Request.Host.Value + context.Request.Path}";
-                string logFilePath = Path.Combine(_env.ContentRootPath, "Logs", "RequestLog.txt");
-                //запись о песещении в текстовый файл
-                await File.AppendAllTextAsync(logFilePath, logMessage);
-                await next.Invoke(); //эта строка вызывает следующий компонет
-            });
+            app.UseMiddleware<LoggingMiddleware>();
 
 
             // Добавим в конвейер запросов обработчик самым простым способом
