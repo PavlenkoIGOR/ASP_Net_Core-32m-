@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.SqlServer;
 
 namespace ASP_Net_Core_example.Models
 {
-    public class MyAppContext : DbContext
+    public sealed class MyAppContext : DbContext
     {
         public DbSet<UserInfo> UserInfos { get; set; }
 

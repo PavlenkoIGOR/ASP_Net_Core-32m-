@@ -20,7 +20,7 @@ namespace ASP_Net_Core_example
     public class Startup
     {
         static IWebHostEnvironment _env;
-        public IConfiguration iConfig;
+        static IConfiguration iConfig;
 
         public Startup(IWebHostEnvironment env, IConfiguration iConf)
         {
@@ -40,7 +40,7 @@ namespace ASP_Net_Core_example
             services.AddSingleton<IUserInfoRepository, UserInfoRepository>();
 
             string connection = iConfig.GetConnectionString("DefaultConnection");
-            services.AddDbContext<MyAppContext>(option => option.UseSqlServer(connection));
+            services.AddDbContext<MyAppContext>(options => options.UseSqlServer(connection), ServiceLifetime.Singleton);
         }
 
 

@@ -14,7 +14,7 @@ namespace ASP_Net_Core_example.MiddleWares
     {
         private readonly RequestDelegate _next;
         static IWebHostEnvironment _env;
-        static IUserInfoRepository _userInfoRepository;
+        private static IUserInfoRepository _userInfoRepository;
 
         /// <summary>
         ///  Middleware-компонент должен иметь конструктор, принимающий RequestDelegate
@@ -49,10 +49,12 @@ namespace ASP_Net_Core_example.MiddleWares
         public async Task InvokeAsync(HttpContext context)
         {
             string userAgent = context.Request.Headers["User-Agent"][0];
-            var newUserInfo = new UserInfo() { 
-            Id = Guid.NewGuid(),
-            Date = DateTime.Now,
-            UserAgent = userAgent};
+            var newUserInfo = new UserInfo()
+            {
+                Id = Guid.NewGuid(),
+                Date = DateTime.Now,
+                UserAgent = userAgent
+            };
             await _userInfoRepository.AddUserInfo(newUserInfo);
 
             await WriteRequestLogIntoTXT(context);
